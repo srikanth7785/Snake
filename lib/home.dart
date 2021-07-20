@@ -9,36 +9,47 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-
   SnakeBrain snake = SnakeBrain();
 
-  int? x,y;
+  List<Cell> body = <Cell>[];
 
   @override
-  void initState(){
-    x = snake.getX();
-    y = snake.getY();
+  void initState() {
+    body = snake.getBody();
     super.initState();
   }
 
-  void changeXY(int newX, int newY){
+  void changeXY(List<Cell> newBody) {
     setState(() {
-      x = newX;
-      y = newY;
+      body = newBody;
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Center(child: Text('Snake, Head only ;)',style: TextStyle(color: Colors.white))),elevation: 0,backgroundColor: Colors.transparent,),
+      appBar: AppBar(
+        title: Center(
+          child: Text(
+            'Snake',
+            style: TextStyle(color: Colors.white),
+          ),
+        ),
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+      ),
       backgroundColor: Colors.black,
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          SwitchGrid(x: x, y: y),
+          SwitchGrid(body: body),
+          SizedBox(height: 10),
           ControlPanel(changeXY),
+          Text(
+            "\nalternatively, you can use `Space` to start/stop, arrow keys to control",
+            style: TextStyle(color: Colors.white),
+            ),
         ],
       ),
     );

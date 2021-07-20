@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:snake/SnakeBrain.dart';
 
 class SwitchGrid extends StatefulWidget {
-  final int? x,y;
-  SwitchGrid({this.x, this.y});
+  final List<Cell> body;
+  SwitchGrid({required this.body});
   @override
   _SwitchGridState createState() => _SwitchGridState();
 }
@@ -15,7 +15,11 @@ class _SwitchGridState extends State<SwitchGrid> {
   SnakeBrain snake = SnakeBrain();
 
   bool isOn(int i){
-    return widget.x == i%len && widget.y == i~/len;
+    return widget.body.contains(Cell(i%len,i~/len));
+  }
+
+  _activeColor(int i){
+      return Cell(i%len,i~/len) == widget.body.last ? Colors.blue : Colors.green;
   }
 
 
@@ -27,8 +31,8 @@ class _SwitchGridState extends State<SwitchGrid> {
         Center(
           child: Container(
           color: Colors.grey.shade800,
-          width: 575,
-          height: size.height * 0.76,
+          width: 450,
+          height: size.height * 0.59,
           child: GridView.builder(
             itemCount: len*len,
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -38,12 +42,15 @@ class _SwitchGridState extends State<SwitchGrid> {
               crossAxisSpacing: 0.0,
             ),
             itemBuilder: (BuildContext context, int i) {
-              return CupertinoSwitch(
-              value: isOn(i),
-              onChanged: (b){
-                snake.toggleState(i);
-                  } 
-                );
+              return Transform.scale(
+                scale: 0.8,
+                child: CupertinoSwitch(
+                value: isOn(i),
+                onChanged: (b){},
+                activeColor: _activeColor(i),
+                trackColor: Colors.grey.shade700,
+                  ),
+              );
               },
             ),
           ),

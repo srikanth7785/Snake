@@ -22,24 +22,28 @@ class _ControlPanelState extends State<ControlPanel> {
   }
 
   move(Direction direction){
-    snake.setCurrentDirection(direction);
-    switch (direction) {
-      case Direction.UP:
-        snake.up();
-        break;
-      case Direction.DOWN:
-        snake.down();
-        break;
-      case Direction.LEFT:
-        snake.left();
-        break;
-      case Direction.RIGHT:
-        snake.right();
-        break;
-      default:
-    }
+    Direction currentDirection = snake.getCurrentDirection();
+    Direction oppositeDirection = snake.getOppositeDirection(currentDirection);
+    if(direction != oppositeDirection){
+      snake.setCurrentDirection(direction);
+      switch (direction) {
+        case Direction.UP:
+          snake.up();
+          break;
+        case Direction.DOWN:
+          snake.down();
+          break;
+        case Direction.LEFT:
+          snake.left();
+          break;
+        case Direction.RIGHT:
+          snake.right();
+          break;
+        default:
+      }
 
-    widget.updateXY(snake.getX(),snake.getY());
+      widget.updateXY(snake.getBody());
+    }
   }
 
   controlButton(IconData iconData, Direction direction){
@@ -60,7 +64,7 @@ class _ControlPanelState extends State<ControlPanel> {
       moving = snake.ismoving();
       if(moving){
         Timer.periodic(
-          Duration(milliseconds: 150), (timer) {
+          Duration(milliseconds: 200), (timer) {
             move(snake.getCurrentDirection());
             if(!moving) timer.cancel();
             setState(() {});
@@ -84,15 +88,18 @@ class _ControlPanelState extends State<ControlPanel> {
 
   _handleKey(RawKeyEvent event) async {
     if(event.runtimeType.toString() == 'RawKeyDownEvent'){
-      if(event.isKeyPressed(LogicalKeyboardKey.arrowDown)){
-        move(Direction.DOWN);
-      }else if(event.isKeyPressed(LogicalKeyboardKey.arrowUp)){
-        move(Direction.UP);
-      }else if(event.isKeyPressed(LogicalKeyboardKey.arrowRight)){
-        move(Direction.RIGHT);
-      }else if(event.isKeyPressed(LogicalKeyboardKey.arrowLeft)){
-        move(Direction.LEFT);
-      }else if(event.isKeyPressed(LogicalKeyboardKey.space)){
+      if(moving){
+        if(event.isKeyPressed(LogicalKeyboardKey.arrowDown)){
+          move(Direction.DOWN);
+        }else if(event.isKeyPressed(LogicalKeyboardKey.arrowUp)){
+          move(Direction.UP);
+        }else if(event.isKeyPressed(LogicalKeyboardKey.arrowRight)){
+          move(Direction.RIGHT);
+        }else if(event.isKeyPressed(LogicalKeyboardKey.arrowLeft)){
+          move(Direction.LEFT);
+        }
+      }
+      if(event.isKeyPressed(LogicalKeyboardKey.space)){
         _startStop();
       }
     }
