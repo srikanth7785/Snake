@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:snake/SnakeBrain.dart';
 class ControlPanel extends StatefulWidget {
   final Function updateXY;
@@ -53,47 +54,70 @@ class _ControlPanelState extends State<ControlPanel> {
     );
   }
 
+  _startStop(){
+    setState(() {
+      moving ? snake.stop() : snake.start();
+      moving = snake.ismoving();
+      if(moving){
+        Timer.periodic(
+          Duration(milliseconds: 150), (timer) {
+            move(snake.getCurrentDirection());
+            if(!moving) timer.cancel();
+            setState(() {});
+            },
+        );
+      }
+    });
+  }
+
   pausePlayButton(){
     return Padding(
       padding: EdgeInsets.all(1),
       child: FloatingActionButton(
         backgroundColor: moving ? Colors.red : Colors.green,
         mini: true,
-        onPressed:(){
-          setState(() {
-            moving ? snake.stop() : snake.start();
-            moving = snake.ismoving();
-            if(moving){
-              Timer.periodic(
-                Duration(milliseconds: 150), (timer) {
-                  move(snake.getCurrentDirection());
-                  if(!moving) timer.cancel();
-                  setState(() {});
-                  },
-              );
-            }
-          });
-        },
+        onPressed: _startStop,
         child: Icon(moving ? Icons.stop : Icons.play_arrow),
         ),
     );
   }
 
+  _handleKey(RawKeyEvent event) async {
+    if(event.runtimeType.toString() == 'RawKeyDownEvent'){
+      if(event.isKeyPressed(LogicalKeyboardKey.arrowDown)){
+        move(Direction.DOWN);
+      }else if(event.isKeyPressed(LogicalKeyboardKey.arrowUp)){
+        move(Direction.UP);
+      }else if(event.isKeyPressed(LogicalKeyboardKey.arrowRight)){
+        move(Direction.RIGHT);
+      }else if(event.isKeyPressed(LogicalKeyboardKey.arrowLeft)){
+        move(Direction.LEFT);
+      }else if(event.isKeyPressed(LogicalKeyboardKey.space)){
+        _startStop();
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        controlButton(Icons.keyboard_arrow_up, Direction.UP),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            controlButton(Icons.keyboard_arrow_left, Direction.LEFT),
-            pausePlayButton(),
-            controlButton(Icons.keyboard_arrow_right, Direction.RIGHT),
-          ],
-        ),
-        controlButton(Icons.keyboard_arrow_down, Direction.DOWN),
-      ],
+    return RawKeyboardListener(
+      focusNode: FocusNode(),
+      autofocus: true,
+      onKey: _handleKey,
+      child: Column(
+        children: [
+          controlButton(Icons.keyboard_arrow_up, Direction.UP),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              controlButton(Icons.keyboard_arrow_left, Direction.LEFT),
+              pausePlayButton(),
+              controlButton(Icons.keyboard_arrow_right, Direction.RIGHT),
+            ],
+          ),
+          controlButton(Icons.keyboard_arrow_down, Direction.DOWN),
+        ],
+      ),
     );
   }
 }
