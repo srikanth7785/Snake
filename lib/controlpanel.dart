@@ -50,8 +50,10 @@ class _ControlPanelState extends State<ControlPanel> {
     return Padding(
       padding: EdgeInsets.all(1),
       child: FloatingActionButton(
+        tooltip: direction.toString().substring(10),
         mini: true,
-        backgroundColor: moving ? Colors.green : Colors.grey,
+        foregroundColor: Colors.brown,
+        backgroundColor: moving ? Colors.green : Colors.white54,
         onPressed: moving ? () => move(direction) : null,
         child: Icon(iconData),
       ),
@@ -78,6 +80,7 @@ class _ControlPanelState extends State<ControlPanel> {
     return Padding(
       padding: EdgeInsets.all(1),
       child: FloatingActionButton(
+        tooltip: 'START/STOP',
         backgroundColor: moving ? Colors.red : Colors.green,
         mini: true,
         onPressed: _startStop,

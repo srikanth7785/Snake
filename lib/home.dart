@@ -28,6 +28,7 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey,
       appBar: AppBar(
         title: Center(
           child: Text(
@@ -38,7 +39,6 @@ class _HomeState extends State<Home> {
         elevation: 0,
         backgroundColor: Colors.transparent,
       ),
-      backgroundColor: Colors.black,
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -48,7 +48,7 @@ class _HomeState extends State<Home> {
           ControlPanel(changeXY),
           Text(
             "\nalternatively, you can use `Space` to start/stop, arrow keys to control",
-            style: TextStyle(color: Colors.white),
+            style: TextStyle(color: Colors.black),
             ),
         ],
       ),

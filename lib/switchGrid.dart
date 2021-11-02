@@ -30,7 +30,17 @@ class _SwitchGridState extends State<SwitchGrid> {
       children: [
         Center(
           child: Container(
-          color: Colors.grey.shade800,
+          padding: EdgeInsets.all(3),
+          decoration: BoxDecoration(
+            boxShadow: [
+              BoxShadow(
+                color: Colors.white70,
+                spreadRadius: 0.1,
+              ),
+            ],
+            borderRadius: BorderRadius.circular(5),
+            color: Colors.grey.shade800,
+          ),
           width: 450,
           height: size.height * 0.59,
           child: GridView.builder(
