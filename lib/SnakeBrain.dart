@@ -1,8 +1,10 @@
+import 'dart:math';
 enum Direction{UP,DOWN,LEFT,RIGHT}
 
 class SnakeBrain{
 
-  List<Cell> _body = [ //Initial body
+// Initial body, treat last element as `head`
+  List<Cell> _body = [
     Cell(0,5),
     Cell(1,5),
     Cell(2,5),
@@ -11,6 +13,8 @@ class SnakeBrain{
     Cell(5,5),
   ];
 
+  Cell _fruit = Cell(2,2);
+  
   final _len = 11;
   bool? _moving;
   Direction _currentDirection = Direction.RIGHT;
@@ -23,6 +27,10 @@ class SnakeBrain{
 
   getBody(){
     return _body;
+  }
+
+  getFruit(){
+    return _fruit;
   }
 
   getCurrentDirection(){
@@ -67,8 +75,37 @@ class SnakeBrain{
     return _moving;
   }
 
+  Cell newFruit(){
+    Random random = Random();
+    int newX = random.nextInt(_len-1);
+    int newY = random.nextInt(_len-1);
+
+    var existingXs = [];
+    var existingYs = [];
+
+    for(var cell in _body){
+      existingXs.add(cell.x);
+      existingYs.add(cell.y);
+    }
+
+    while(existingXs.contains(newX)){
+      newX = random.nextInt(_len-1);
+    }
+
+    while(existingYs.contains(newY)){
+      newY = random.nextInt(_len-1);
+    }
+
+    return Cell(newX, newY);
+
+  }
+
   _addHeadRemoveTail(){
+    if(Cell(_headX,_headY) == _fruit){
+      _fruit = newFruit();
+    }else{
     _body.removeAt(0);
+    }
     _body.add(Cell(_headX,_headY));
   }
 

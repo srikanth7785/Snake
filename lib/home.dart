@@ -12,16 +12,19 @@ class _HomeState extends State<Home> {
   SnakeBrain snake = SnakeBrain();
 
   List<Cell> body = <Cell>[];
+  Cell fruit = Cell(2,2);
 
   @override
   void initState() {
     body = snake.getBody();
+    fruit = snake.getFruit();
     super.initState();
   }
 
-  void changeXY(List<Cell> newBody) {
+  void changeXY(List<Cell> newBody, Cell newFruit) {
     setState(() {
       body = newBody;
+      fruit = newFruit;
     });
   }
 
@@ -32,7 +35,7 @@ class _HomeState extends State<Home> {
       appBar: AppBar(
         title: Center(
           child: Text(
-            'Snake',
+            'Cupertino Snake 🐍',
             style: TextStyle(color: Colors.white),
           ),
         ),
@@ -43,11 +46,11 @@ class _HomeState extends State<Home> {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          SwitchGrid(body: body),
+          SwitchGrid(body: body, fruit: fruit,),
           SizedBox(height: 10),
           ControlPanel(changeXY),
           Text(
-            "\nalternatively, you can use `Space` to start/stop, arrow keys to control",
+            "\nAlternatively, you can use `Space` to start/stop, arrow keys to control",
             style: TextStyle(color: Colors.black),
             ),
         ],

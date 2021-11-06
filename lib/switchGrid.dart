@@ -4,7 +4,8 @@ import 'package:snake/SnakeBrain.dart';
 
 class SwitchGrid extends StatefulWidget {
   final List<Cell> body;
-  SwitchGrid({required this.body});
+  final Cell fruit;
+  SwitchGrid({required this.body, required this.fruit});
   @override
   _SwitchGridState createState() => _SwitchGridState();
 }
@@ -15,11 +16,11 @@ class _SwitchGridState extends State<SwitchGrid> {
   SnakeBrain snake = SnakeBrain();
 
   bool isOn(int i){
-    return widget.body.contains(Cell(i%len,i~/len));
+    return widget.body.contains(Cell(i%len,i~/len)) || widget.fruit == Cell(i%len, i~/len);
   }
 
   _activeColor(int i){
-      return Cell(i%len,i~/len) == widget.body.last ? Colors.blue : Colors.green;
+      return Cell(i%len,i~/len) == widget.body.last ? Colors.blue : Cell(i%len,i~/len) == widget.fruit ? Colors.yellow : Colors.green;
   }
 
 

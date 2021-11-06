@@ -42,7 +42,7 @@ class _ControlPanelState extends State<ControlPanel> {
         default:
       }
 
-      widget.updateXY(snake.getBody());
+      widget.updateXY(snake.getBody(), snake.getFruit(),);
     }
   }
 
